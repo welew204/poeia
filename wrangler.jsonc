@@ -1,0 +1,57 @@
+{
+  // Schema reference
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  // Worker name
+  "name": "poeia",
+
+  // Entry point
+  "main": "src/worker.tsx",
+
+  // Compatibility settings
+  "compatibility_date": "2024-09-23",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Assets configuration
+  "assets": {
+    "binding": "ASSETS"
+  },
+
+  // Observability settings
+  "observability": {
+    "enabled": true
+  },
+
+  // Durable Objects configuration
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "SESSION_DURABLE_OBJECT",
+        "class_name": "SessionDurableObject"
+      }
+    ]
+  },
+
+  // Environment variables
+  "vars": {
+    "APP_NAME": "poeia",
+    "WEBAUTHN_APP_NAME": "poeia"
+  },
+
+  // Migrations configuration
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["SessionDurableObject"]
+    }
+  ],
+
+  // D1 database configuration
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "poeia",
+      "database_id": "63969411-a9a8-4cd2-b68f-b8c435540c91"
+    }
+  ]
+}
