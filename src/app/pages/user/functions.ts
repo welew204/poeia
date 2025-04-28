@@ -62,6 +62,8 @@ export async function startPasskeyLogin() {
 
 export async function finishPasskeyRegistration(
   username: string,
+  firstName: string,
+  lastName: string,
   registration: RegistrationResponseJSON,
 ) {
   const { request, headers } = requestInfo;
@@ -90,6 +92,8 @@ export async function finishPasskeyRegistration(
   const user = await db.user.create({
     data: {
       username,
+      firstName,
+      lastName
     },
   });
 

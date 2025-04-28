@@ -3,24 +3,27 @@
 import { useState, useTransition } from "react";
 import {
   startAuthentication,
-  startRegistration,
 } from "@simplewebauthn/browser";
 import {
   finishPasskeyLogin,
-  finishPasskeyRegistration,
   startPasskeyLogin,
-  startPasskeyRegistration,
 } from "./functions";
+import { useTurnstile } from "@redwoodjs/sdk/turnstile";
 import {
   Button
 } from "@/app/components/ui/button"
+import { AuthLayout } from "@/app/layouts/AuthLayout"
+import { Alert, AlertTitle } from "@/app/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { link } from "@/app/shared/links";
 
+const TURNSTILE_SITE_KEY = "0x4AAAAAABT-euCzCx1ZSj-H";
 export function Login() {
   const [username, setUsername] = useState("");
   const [result, setResult] = useState("");
   // adding this
-  const TURNSTILE_SITE_KEY = "0x4AAAAAABT-euCzCx1ZSj-H";
   const [isPending, startTransition] = useTransition();
+  const turnstile = useTurnstile(TURNSTILE_SITE_KEY);
 
   const passkeyLogin = async () => {
     // 1. Get a challenge from the worker
@@ -35,24 +38,7 @@ export function Login() {
     if (!success) {
       setResult("Login failed");
     } else {
-      setResult("Login successful!");
-    }
-  };
-
-  const passkeyRegister = async () => {
-    // 1. Get a challenge from the worker
-    const options = await startPasskeyRegistration(username);
-
-    // 2. Ask the browser to sign the challenge
-    const registration = await startRegistration({ optionsJSON: options });
-
-    // 3. Give the signed challenge to the worker to finish the registration process
-    const success = await finishPasskeyRegistration(username, registration);
-
-    if (!success) {
-      setResult("Registration failed");
-    } else {
-      setResult("Registration successful!");
+      return window.location.href = "/";
     }
   };
 
@@ -60,26 +46,34 @@ export function Login() {
     startTransition(() => void passkeyLogin());
   };
 
-  const handlePerformPasskeyRegister = () => {
-    startTransition(() => void passkeyRegister());
-  };
-
   return (
-    <main className="bg-bg">
-      <h1 className="text-4xl font-bold text-red-500">YOLO</h1>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
-      />
-      <Button onClick={handlePerformPasskeyLogin} disabled={isPending}>
-        {isPending ? <>...</> : "Login with passkey"}
-      </Button>
-      <Button onClick={handlePerformPasskeyRegister} disabled={isPending}>
-        {isPending ? <>...</> : "Register with passkey"}
-      </Button>
-      {result && <div>{result}</div>}
-    </main>
+    <AuthLayout>
+      <div className="absolute top-0 right-0 p-10">
+        <a href={link('/user/signup')} className="font-display font-bold text-black text-sm underline underline-offset-8 hover:decoration-primary">
+          Register
+        </a>
+      </div>
+      <div className="auth-form max-w-[400px] w-full mx-auto px-10">
+        <h1 className="page-title text-center">Login</h1>
+        <p className="py-6">Enter your username below to sign-in.</p>
+        <div ref={turnstile.ref} />
+        {result && (
+            <Alert variant="destructive" className="mb-5">
+              <AlertCircle className="h-4 w-4"/>
+              <AlertTitle>{result}</AlertTitle>
+            </Alert>
+        )}
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Username"
+        />
+        <Button onClick={handlePerformPasskeyLogin} disabled={isPending} className="font-display w-full mb-6">
+          {isPending ? <>...</> : "Login with passkey"}
+        </Button>
+        <p>By clicking continue, you agree to our <a href={link("/legal/terms")}>Terms of Service</a> and <a href={link("/legal/privacy")}>Privacy Policy</a>.</p>
+      </div>
+    </AuthLayout>
   );
 }

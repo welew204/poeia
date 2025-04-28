@@ -6,23 +6,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
-    --font-display: "Poppins", sans-serif;
-    --font-body: "Inter", sans-serif;
-    --color-bg: #e4e3d4;
-    --color-border: #eeeef0;
-
-    --color-primary: #f7b736;
-    --color-secondary: #f1f1e8;
-    --color-destructive: #ef533f;
-
-    --color-tag-applied: #b1c7c0;
-    --color-tag-interview: #da9b7c;
-    --color-tag-new: #db9a9f;
-    --color-tag-rejected: #e4e3d4;
-    --color-tag-offer: #aae198;
-}
-
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
@@ -136,5 +119,63 @@
     }
   body {
     @apply bg-background text-foreground;
+    }
+}
+
+@theme {
+    --font-display: "Poppins", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --color-bg: #e4e3d4;
+    --color-border: #eeeef0;
+
+    --color-primary: #f7b736;
+    --color-secondary: #f1f1e8;
+    --color-destructive: #ef533f;
+
+    --color-tag-applied: #b1c7c0;
+    --color-tag-interview: #da9b7c;
+    --color-tag-new: #db9a9f;
+    --color-tag-rejected: #e4e3d4;
+    --color-tag-offer: #aae198;
+    --color-primary-foreground: #000;
+    --spacing-page-side: 40px;
+}
+
+@utility center {
+    @apply flex items-center justify-center;
+}
+
+@layer base, components, page;
+
+@layer base {
+    h1, h2, h3 {
+      @apply font-display font-bold;
+    }
+    input[type="text"] {
+        @apply border-border border-1 rounded-md px-3 h-9 block w-full mb-2 text-base;
+    }
+    nav {
+        @apply font-display font-medium text-sm;
+      }
+}
+
+@layer components {
+    .page-title {
+      @apply text-3xl
+    }
+    .page-wrapper {
+        @apply bg-bg min-h-screen min-w-screen p-12;
+    }
+    .page {
+        @apply min-h-[calc(100vh-96px)] rounded-xl border-2 border-[#D6D5C5];
+    }
+}
+
+@layer page {
+    /* login page */
+    .auth-form {
+        p { @apply text-sm text-zinc-500 text-center;
+        a { @apply text-zinc-500 hover:text-black underline whitespace-nowrap; }
+        }
     }
 }

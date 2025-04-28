@@ -14,7 +14,7 @@ model User {
   username    String      @unique
   firstName   String
   lastName    String
-  email       String
+  // email       String -> removing this bc of https://docs.rwsdk.com/core/authentication/#username-vs-email
   createdAt   DateTime    @default(now())
   credentials Credential?
   elements    Element[]

@@ -13,6 +13,9 @@ export default defineScript(async ({ env }) => {
     data: {
       id: "1",
       username: "testuser",
+      firstName: "Dillon",
+      lastName: "Westbrook",
+      email: "dill@pickle.com"
     },
   });
 

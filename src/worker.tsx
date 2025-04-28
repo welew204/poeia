@@ -1,5 +1,5 @@
 import { defineApp, ErrorResponse } from "@redwoodjs/sdk/worker";
-import { route, render, prefix } from "@redwoodjs/sdk/router";
+import { index, route, render, prefix } from "@redwoodjs/sdk/router";
 import { Document } from "@/app/Document";
 import { Home } from "@/app/pages/Home";
 import { setCommonHeaders } from "@/app/headers";
@@ -9,12 +9,23 @@ import { Session } from "./session/durableObject";
 import { db, setupDb } from "./db";
 import type { User } from "@prisma/client";
 import { env } from "cloudflare:workers";
+import { Dashboard } from "./app/pages/applications/Dashboard"
+
 export { SessionDurableObject } from "./session/durableObject";
 
 export type AppContext = {
   session: Session | null;
   user: User | null;
 };
+
+const isAuthenticated = ({ ctx }: { ctx: AppContext}) => {
+  if (!ctx.user) {
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/user/login" },
+    });
+  }
+}
 
 export default defineApp([
   setCommonHeaders(),
@@ -47,18 +58,12 @@ export default defineApp([
     }
   },
   render(Document, [
-    route("/", () => new Response("Hello, World!")),
-    route("/protected", [
-      ({ ctx }) => {
-        if (!ctx.user) {
-          return new Response(null, {
-            status: 302,
-            headers: { Location: "/user/login" },
-          });
-        }
-      },
-      Home,
-    ]),
+    index([isAuthenticated, Home]),
     prefix("/user", userRoutes),
+    route("/legal/privacy", () => <h1>Privacy Policy</h1>),
+    route("/legal/terms", () => <h1>Terms of Service</h1>),
+    prefix("/applications", [
+      route("/", [ isAuthenticated, Dashboard]),
+    ])
   ]),
 ]);
