@@ -6,6 +6,10 @@ export default defineScript(async ({ env }) => {
 
   await db.$executeRawUnsafe(`\
     DELETE FROM User;
+    DELETE FROM Element;
+    DELETE FROM Recipe;
+    DELETE FROM Step;
+    DELETE FROM Credential
     DELETE FROM sqlite_sequence;
   `);
 
@@ -15,7 +19,6 @@ export default defineScript(async ({ env }) => {
       username: "testuser",
       firstName: "Dillon",
       lastName: "Westbrook",
-      email: "dill@pickle.com"
     },
   });
 

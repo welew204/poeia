@@ -1,0 +1,1 @@
+SELECT id, name, updatedAt, typeof(updatedAt) FROM Recipe;

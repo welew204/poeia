@@ -9,7 +9,9 @@ import { Session } from "./session/durableObject";
 import { db, setupDb } from "./db";
 import type { User } from "@prisma/client";
 import { env } from "cloudflare:workers";
-import { Dashboard } from "./app/pages/applications/Dashboard"
+import { Dashboard } from "./app/pages/main/Dashboard"
+import { Recipes } from "./app/pages/main/Recipes"
+import { Elements } from "./app/pages/main/Elements"
 
 export { SessionDurableObject } from "./session/durableObject";
 
@@ -62,8 +64,10 @@ export default defineApp([
     prefix("/user", userRoutes),
     route("/legal/privacy", () => <h1>Privacy Policy</h1>),
     route("/legal/terms", () => <h1>Terms of Service</h1>),
-    prefix("/applications", [
-      route("/", [ isAuthenticated, Dashboard]),
+    prefix("/main", [
+      route("/", [ isAuthenticated, Dashboard ]),
+      route("/recipes", [ isAuthenticated, Recipes ]),
+      route("/elements", [ isAuthenticated, Elements ])
     ])
   ]),
 ]);

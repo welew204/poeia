@@ -24,7 +24,6 @@ const Dashboard = () => {
 
     return (
         <InteriorLayout>
-            <Header />
             <div className="w-full h-[80vh]">
                 <VoronoiPane cellArray={children} />
             </div>

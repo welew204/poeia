@@ -7,5 +7,7 @@ export const link = defineLinks([
     "/user/logout",
     "/legal/privacy",
     "/legal/terms",
-    "/applications"
+    "/main",
+    "/main/recipes",
+    "/main/elements",
   ]);
