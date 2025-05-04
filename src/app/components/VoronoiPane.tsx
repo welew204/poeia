@@ -106,7 +106,7 @@ export const VoronoiPane: React.FC<TiledButtonGridProps> = ({ cellArray }) => {
                     <text
                       x={x}
                       y={y}
-                      textAnchor="middle"
+                      textAnchor="start"
                       dominantBaseline="middle"
                       fill="white"
                       fontSize={getFontSize(cell.size)}

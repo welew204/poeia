@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Element" ADD COLUMN "colorHex" TEXT;
+
+-- DropTable
+PRAGMA foreign_keys=off;
+PRAGMA foreign_keys=on;

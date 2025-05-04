@@ -113,14 +113,6 @@
     --sidebar-ring: oklch(0.553 0.013 58.071);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-    }
-  body {
-    @apply bg-background text-foreground;
-    }
-}
 
 @theme {
     --font-display: "Poppins", sans-serif;
@@ -148,6 +140,12 @@
 @layer base, components, page;
 
 @layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
     h1, h2, h3 {
       @apply font-display font-bold;
     }
@@ -157,11 +155,15 @@
     nav {
         @apply font-display font-medium text-sm;
       }
+    button:not([disabled]),
+    [role="button"]:not([disabled]) {
+        cursor: pointer;
+    }
 }
 
 @layer components {
     .page-title {
-      @apply text-3xl
+        @apply text-3xl
     }
     .page-wrapper {
         @apply bg-bg min-h-screen min-w-screen p-12;

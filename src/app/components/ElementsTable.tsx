@@ -34,7 +34,7 @@ const ElementsTable = ({ elements }: { elements: Element[] }) => {
                       )
                     )
                   ];
-                console.log(recipeNames)
+                //console.log(recipeNames)
                 const recipeItems = recipeNames.map(rec => <li key={rec}>{rec}</li>)
                 return (<TableRow key={element.id}>
               <TableCell className="font-medium">{element.name}</TableCell>

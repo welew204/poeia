@@ -1,31 +1,44 @@
-import { Header } from "@/app/components/Header"
+import { db } from "src/db";
 import { VoronoiPane } from "@/app/components/VoronoiPane"
 import { InteriorLayout } from "@/app/layouts/InteriorLayout"
 import { link } from "@/app/shared/links";
 
-const Dashboard = () => {
-    const children = [
-        {
-            label: "Bourbon",
-            url: link("/"),
-            color: "#b27041"
-          },
-          {
-            label: "Tequila",
-            url: link("/"),
-            color: "#F5C9A5"
-          },
-          {
-            label: "Gin",
-            url: link("/"),
-            color: "#ADD8E6"
-          }          
-    ];
+const Dashboard = async () => {
+    const shelfBottleTypes = ['spirit', 'fortified wine', 'liquer']
+
+    const spirits = await db.element.findMany({
+      where: {
+        type: {
+          in: shelfBottleTypes
+        }
+      }
+    })
+    console.log(spirits)
+    const spiritPanes = spirits.map((spirit) => (
+      {
+        label: spirit.name,
+        url: link("/main/recipes"),
+        color: spirit.colorHex
+      }
+    ))
+    console.log(spiritPanes)
+    const recipes = await db.recipe.findMany()
+    const recipePanes = recipes.map((recipe) => (
+      {
+        label: recipe.name,
+        url: link("/main/recipes"),
+        color: "#2596be"
+      }
+    ))
+    console.log(recipePanes)
+    const totalPanes = recipePanes.concat(spiritPanes)
+
+
 
     return (
         <InteriorLayout>
             <div className="w-full h-[80vh]">
-                <VoronoiPane cellArray={children} />
+                <VoronoiPane cellArray={totalPanes} />
             </div>
         </InteriorLayout>
     )
