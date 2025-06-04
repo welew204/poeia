@@ -24,7 +24,7 @@ const Elements = async () => {
                 <ElementsTable elements={elements}/>
                 <div className="px-page-side center mt-2">
                     {/* <h1 className="page-title">All Elements</h1> */}
-                <CreateElementDialog/>
+                    <CreateElementDialog/>
                 </div>
                 {/* <pre>{JSON.stringify(elements, null, 2)}</pre> */}
             </div>

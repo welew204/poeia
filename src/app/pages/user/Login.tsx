@@ -17,7 +17,10 @@ import { Alert, AlertTitle } from "@/app/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { link } from "@/app/shared/links";
 
+
+// TODO move to constants
 const TURNSTILE_SITE_KEY = "0x4AAAAAABT-euCzCx1ZSj-H";
+
 export function Login() {
   const [username, setUsername] = useState("");
   const [result, setResult] = useState("");
@@ -38,7 +41,7 @@ export function Login() {
     if (!success) {
       setResult("Login failed");
     } else {
-      return window.location.href = "/";
+      return window.location.href = "/main";
     }
   };
 

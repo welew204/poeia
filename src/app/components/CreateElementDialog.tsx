@@ -25,19 +25,36 @@ import { Label } from "./ui/label"
 import { NumericInput } from "@/app/components/NumericInput"
 import React, { useEffect, useRef, useState } from 'react';
 import { createElement } from "@/app/pages/main/actions"
-
+import { isFormValid } from "@/app/utils"
 
 const CreateElementDialog = () => {
-  const [ quantity, setQuantity ] = useState(0.0)
+  const [ quantity, setQuantity ] = useState(Number)
   const [ colorHex, setColorHex ] = useState("#2596be")
-  const [ title, setTitle ] = useState("")
+  const [ name, setName ] = useState("")
   const [ brand, setBrand ] = useState("")
   const [ type, setType ] = useState("")
   const [ unit, setUnit ] = useState("")
+  console.log(type)
 
   const handleSubmit = async (formData: FormData) => {
-    const result = await createElement(formData);
+    // TODO make sure 'Select' type fields, as well as quantity will correctly fail if no option is selected
+    if (!isFormValid(formData, ["brand", "colorHex"])) {
+      console.error("form data is invalid");
+      // TODO modify the form view, don't just log an error...
+      return;
+    }
+
+    const result:
+    | { success: true; error: null }
+    | { success: false; error: Error } = await createElement(formData);
+
     if (result.success) {
+      setName("")
+      setQuantity(0)
+      setType("")
+      setBrand("")
+      setColorHex("#2596be")
+      setUnit("")
       window.location.href = `/main/elements`;
     } else {
       console.error(result.error);
@@ -54,21 +71,21 @@ const CreateElementDialog = () => {
             <DialogHeader>
               <DialogTitle>Add Element</DialogTitle>
               <DialogDescription>
-                Add Elements to your bar. Click save when you're done.
+                Add Elements to your bar. Click 'Save changes' when you're done.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="title" className="text-right">
-                  Name
-                </label>
-                <input type="text" id="title" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <Label htmlFor="name" className="text-right">
+                    Name
+                </Label>
+                <input type="text" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="element" className="text-right">
                     Type
                 </Label>
-                <Select name="type">
+                <Select onValueChange={(val) => setType(val)} value={type} name="type">
                   <SelectTrigger id="type" className="w-[180px] col-span-3">
                     <SelectValue placeholder="Select what type" />
                   </SelectTrigger>
@@ -104,7 +121,7 @@ const CreateElementDialog = () => {
                     for items, use 'unit(s)'
                   </p>
                 </div>
-                <Select name="unit">
+                <Select onValueChange={(val) => setUnit(val)} value={unit} name="unit">
                   <SelectTrigger id="unit" className="w-[180px] col-span-3">
                     <SelectValue placeholder="oz, lb, ml" />
                   </SelectTrigger>
@@ -120,23 +137,34 @@ const CreateElementDialog = () => {
                 </Select>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-              <div  className="flex-col">
-                <Label htmlFor="colorHex" className="text-right">
-                    Color
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Optional
-                </p>
+                <div  className="flex-col">
+                  <Label htmlFor="brand" className="text-right">
+                      Brand
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Optional
+                  </p>
+                </div>
+                  <input type="text" id="brand" name="brand" value={brand} onChange={(e) => setBrand(e.target.value)} />
               </div>
-              <Input
-                name="colorHex"
-                id="colorHex"
-                type="color"
-                value={colorHex}
-                onChange={(e) => setColorHex(e.target.value)}
-                /* {...props} */
-                className="h-10 w-16 p-1 cursor-pointer"
-              />
+              <div className="grid grid-cols-4 items-center gap-4">
+                <div  className="flex-col">
+                  <Label htmlFor="colorHex" className="text-right">
+                      Color
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Optional
+                  </p>
+                </div>
+                <Input
+                  name="colorHex"
+                  id="colorHex"
+                  type="color"
+                  value={colorHex}
+                  onChange={(e) => setColorHex(e.target.value)}
+                  /* {...props} */
+                  className="h-10 w-16 p-1 cursor-pointer"
+                />
               </div>
             </div>
             <DialogFooter>

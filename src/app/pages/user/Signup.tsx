@@ -21,7 +21,8 @@ export const Signup = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [result, setResult] = useState("");
-    // adding this
+    
+    // TODO move to constants adding this
     const TURNSTILE_SITE_KEY = "0x4AAAAAABT-euCzCx1ZSj-H";
     const [isPending, startTransition] = useTransition();
   
