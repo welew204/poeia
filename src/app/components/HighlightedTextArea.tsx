@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useState } from "react";
 
 type HighlightedTextareaProps = {
@@ -8,21 +10,48 @@ type HighlightedTextareaProps = {
   };
 
 const HighlightedTextarea = ({ ingredients, stepIndex, value, onTextChange }: HighlightedTextareaProps) => {
-  const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // sliding window approach to highlight ingredients in the text
   const highlightText = (text: string) => {
     if (!ingredients.length) return text;
-
-    const words = text.split(/(\s+)/); // Preserve spaces
-    return words.map((word, idx) => {
-      const cleanWord = word.replace(/[^\w]/g, "").toLowerCase();
-      const match = ingredients.find(ing => ing.toLowerCase() === cleanWord);
-      if (match) {
-        return `<span class="bg-yellow-200 font-semibold">${word}</span>`;
+  
+    const sortedIngredients = [...ingredients].sort((a, b) => b.length - a.length); // longest first
+    //console.log(sortedIngredients);
+    const lowerText = text.toLowerCase();
+    let result = '';
+    let i = 0;
+  
+    while (i < text.length) {
+      let matchFound = false;
+  
+      for (const ingredient of sortedIngredients) {
+        const ingredientLength = ingredient.length;
+        const textWindow = lowerText.slice(i, i + ingredientLength);
+  
+        if (textWindow === ingredient.toLowerCase()) {
+          // Boundary conditions
+          const before = i === 0 || /\s/.test(text[i - 1]);
+          const after = (i + ingredientLength >= text.length) || /\s|[.,!?]/.test(text[i + ingredientLength]);
+  
+          if (before && after) {
+            // Match found with boundaries!
+            const originalText = text.slice(i, i + ingredientLength);
+            result += `<span class="bg-yellow-200 font-semibold">${originalText}</span>`;
+            i += ingredientLength;
+            matchFound = true;
+            break;
+          }
+        }
       }
-      return word;
-    }).join('');
+  
+      if (!matchFound) {
+        result += text[i];
+        i += 1;
+      }
+    }
+  
+    return result;
   };
 
   return (

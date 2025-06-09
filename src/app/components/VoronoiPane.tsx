@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Delaunay } from 'd3-delaunay';
+import { polygonCentroid } from 'd3-polygon';
 
 type CellData = {
   label?: string;
@@ -86,6 +87,8 @@ export const VoronoiPane: React.FC<TiledButtonGridProps> = ({ cellArray }) => {
       >
         {points.map(([x, y], i) => {
           const pathData = voronoi.renderCell(i);
+          const cellPolygon = voronoi.cellPolygon(i);
+          const [centroidX, centroidY] = polygonCentroid(cellPolygon);
           const cell = filledCells[i];
 
           return (
@@ -104,9 +107,9 @@ export const VoronoiPane: React.FC<TiledButtonGridProps> = ({ cellArray }) => {
                   />
                   {cell.label && (
                     <text
-                      x={x}
-                      y={y}
-                      textAnchor="start"
+                      x={centroidX}
+                      y={centroidY}
+                      textAnchor="middle"
                       dominantBaseline="middle"
                       fill="white"
                       fontSize={getFontSize(cell.size)}

@@ -20,6 +20,7 @@ const RecipesTable = ({ recipes }: { recipes: Recipe[] }) => {
             <TableHead className="w-[100px]">Recipe</TableHead>
             <TableHead>Elements</TableHead>
             <TableHead>Steps</TableHead>
+            <TableHead>{/* this is just to hold a column for a button to 'make the recipe' */}</TableHead>
             <TableHead className="text-right">Rating</TableHead>
           </TableRow>
         </TableHeader>
@@ -41,6 +42,7 @@ const RecipesTable = ({ recipes }: { recipes: Recipe[] }) => {
                 </ul>
                 </TableCell>
               <TableCell>{recipe.steps?.length || 1}</TableCell>
+              <TableCell>makeitmakeit</TableCell>
               <TableCell className="text-right">FIVE STARS</TableCell>
             </TableRow>)})}
         </TableBody>
