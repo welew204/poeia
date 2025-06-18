@@ -1,16 +1,18 @@
 import { Input } from "./ui/input";
-import { useState } from "react";
 
-function NumericInput({ value, onChange, ...props }) {
+function NumericInput({ value, onChange, integerOnly = false, ...props }) {
   const handleChange = (e) => {
     const newVal = e.target.value;
 
     // Allow: empty, -, ., -. or valid float/int
-    if (
+    if (integerOnly) {
+      // For integer only, allow empty, or valid integer
+      if (newVal === "" || /^-?\d*$/.test(newVal)) {
+        onChange(newVal);
+      }
+    } else if (
       newVal === "" ||
-      newVal === "-" ||
       newVal === "." ||
-      newVal === "-." ||
       /^-?\d*\.?\d*$/.test(newVal)
     ) {
       onChange(newVal);

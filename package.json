@@ -24,7 +24,8 @@
     "seed": "npm run worker:run ./src/scripts/seed.ts",
     "generate": "rw-scripts ensure-env && prisma generate && wrangler types",
     "check": "npm run generate && npm run types",
-    "types": "tsc"
+    "types": "tsc",
+    "icons": "lemon-lime-svgs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -84,10 +85,20 @@
     "@types/node": "^22.14.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "lemon-lime-svgs": "^2.0.1",
     "prisma": "~6.5.0",
     "tw-animate-css": "^1.2.8",
     "typescript": "^5.8.3",
     "vite": "^6.2.6",
     "wrangler": "^4.8.0"
+  },
+  "lemonLimeSvgs": {
+    "inputDir": "./other/svg-icons",
+    "outputDir": "./public/images/icons",
+    "typesDir": "./types",
+    "spriteFilename": "sprite.svg",
+    "typeFilename": "icons.d.ts",
+    "verbose": true,
+    "generateReadme": true
   }
 }

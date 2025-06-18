@@ -24,6 +24,49 @@ function getNumberFromFormData(formData: FormData, key: string): number {
     return num;
   }
 
+async function isRecipeMakeable(recipeId: string, numberOfUnits: number): 
+    Promise<{ isMakeable: boolean; error: null | Error } | { isMakeable: null; error: Error }> {
+    console.log("Checking if recipe is makeable with id:", recipeId);
+    try {
+        const recipe = await db.recipe.findUnique({
+            where: { id: recipeId },
+            include: {
+                steps: {
+                    include: {
+                        elements: {
+                            include: {
+                                element: true
+                                }
+                            }
+                        }
+                    }
+            }
+        });
+        if (!recipe) {
+            throw new Error('Recipe not found') 
+        };
+        //console.log("recipe", recipe)
+        // console.log("steps", recipe.steps)
+        const recipeElements = recipe.steps.flatMap(step => step.elements);
+        // console.log("recipe elements", recipeElements)
+        /* const inventoryElements = recipe.steps.flatMap(step => step.elements.map(e => e.element));
+        console.log("inventory elements", inventoryElements) */
+        for (let e = 0; e < recipeElements.length; e += 1) {
+            const recipeElement = recipeElements[e];
+            const amtNeeded = recipeElement.qty * numberOfUnits;
+            //console.log(`checking amount of ${recipeElement.element.name}...`, amtNeeded, recipeElement.element.quantity)
+            //const convertedInventoryQty = //make a function to convert the inventory quantity to the same unit as the recipe element (should take both as params, but only return the inventoryElementQty converted)
+            if (amtNeeded > recipeElement.element.quantity) {
+                console.log(`Not enough ${recipeElement.element.name} in inventory`);
+                return { isMakeable: false, error: new Error(`Not enough ${recipeElement.element.name} in inventory`) };
+            }
+        }
+        return { isMakeable: true, error: null }
+    } catch (err) {
+        return { isMakeable: null, error: err instanceof Error ? err : new Error('Unknown error') };
+    }
+  }
+
 async function createElement(formData: FormData): 
     Promise<{ success: true; error: null } | { success: false; error: Error }> {
     try {
@@ -89,16 +132,6 @@ const createRecipe = async (formData: FormData, ingredients: Ingredient[], steps
             const matchingIngredients = ingredients.filter(ing => lowerStep.includes(ing.name.toLowerCase()));
             for (const ingredient of matchingIngredients) {
                 eisToCreate.push({
-                    /* element: {
-                        connect: {
-                            id: ingredient.id
-                        }
-                    },
-                    step: {
-                        connect: {
-                            id: step.id
-                        }
-                    }, */
                     stepId: step.id,
                     elementId: ingredient.id,
                     qty: ingredient.quantity,
@@ -129,4 +162,23 @@ const getElements = async () => {
     }
 }
 
-export { createElement, createRecipe, getElements }
+
+
+function serializeRecipe(recipe: any) {
+    return {
+      ...recipe,
+      steps: recipe.steps?.map(step => ({
+        ...step,
+        elements: step.elements.map(eis => ({
+          ...eis,
+          qty: eis.qty.toNumber?.() ?? eis.qty, // handle Prisma.Decimal
+        })),
+      })),
+    };
+  }
+
+export { createElement, 
+    createRecipe, 
+    getElements, 
+    isRecipeMakeable, 
+    serializeRecipe };
