@@ -58,7 +58,7 @@ const CreateRecipeDialog = ({elements}: {elements: Element[]}) => {
     const allIngredientsMentioned = actualIngredients.every(ingredient =>
       stepsString.includes(ingredient.name.toLowerCase())
     );
-    if (!isFormValid(formData, ["glass"]) || !allIngredientsMentioned) {
+    if (!isFormValid(formData, ["glass", "colorHex"]) || !allIngredientsMentioned) {
       setShowRequired(true);
       console.log("form data is invalid");
       if (!allIngredientsMentioned) {

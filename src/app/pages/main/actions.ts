@@ -111,6 +111,7 @@ const createRecipe = async (formData: FormData, ingredients: Ingredient[], steps
                 },
                 createdAt: new Date(),
                 updatedAt: new Date(),
+                colorHex: formData.get("colorHex") as string,
                 steps: {
                     create: steps.map((step, index) => ({
                         action: step,

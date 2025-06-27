@@ -41,6 +41,7 @@ const MakeRecipeDialog = ({
       setRecipeIsMakeable(recipeIsMakeable.isMakeable || false);
     }
 
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -62,6 +63,7 @@ const MakeRecipeDialog = ({
               onChange={setNumberOfServings}
               value={numberOfServings}
               integerOnly = {true}
+              className="mt-2"
             />
           <Button
             className="mt-2"
@@ -71,7 +73,32 @@ const MakeRecipeDialog = ({
           </Button>
         </div>
         { checkedRecipe && recipeIsMakeable ? (
-          <h2>BOOM</h2>) : (checkedRecipe? <h2>Not so fast...</h2> : <p>Click the button to check if you can make this recipe</p>)
+          <div>
+              {recipe.steps.map((step, index) => (
+                <div key={index} className="mt-2">
+                  <Icon id="check" className="inline mr-2" />
+                  <strong>Step {index + 1}:</strong> {step.action}
+                  <div
+                    className="flex"
+                  >
+                    <ul className="list-disc ml-6">
+                      {step.elements.map((element, idx) => (
+                        <li key={idx}>
+                          {element.element.name} - {element.qty * numberOfServings} {element.element.unit}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+              {/* <DialogFooter>
+                  <Button className="mt-2">Made it!</Button>
+                <p
+                  className="text-sm text-muted-foreground mt-2">
+                This will handle updating your inventory based on the number of servings</p>
+              </DialogFooter> */}
+          </div>
+        ) : (checkedRecipe? <h2>Not so fast...</h2> : <p>Click the button to check if you can make this recipe</p>)
         }
       </DialogContent>
     </Dialog>
