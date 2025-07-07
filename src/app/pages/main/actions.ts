@@ -24,8 +24,8 @@ function getNumberFromFormData(formData: FormData, key: string): number {
     return num;
   }
 
-async function isRecipeMakeable(recipeId: string, numberOfUnits: number): 
-    Promise<{ isMakeable: boolean; error: null | Error } | { isMakeable: null; error: Error }> {
+async function servingsMakeableOfRecipe(recipeId: string): 
+    Promise<{ makeableServings: number; error: null | Error }> {
     console.log("Checking if recipe is makeable with id:", recipeId);
     try {
         const recipe = await db.recipe.findUnique({
@@ -48,22 +48,26 @@ async function isRecipeMakeable(recipeId: string, numberOfUnits: number):
         //console.log("recipe", recipe)
         // console.log("steps", recipe.steps)
         const recipeElements = recipe.steps.flatMap(step => step.elements);
-        // console.log("recipe elements", recipeElements)
-        /* const inventoryElements = recipe.steps.flatMap(step => step.elements.map(e => e.element));
-        console.log("inventory elements", inventoryElements) */
-        for (let e = 0; e < recipeElements.length; e += 1) {
-            const recipeElement = recipeElements[e];
-            const amtNeeded = recipeElement.qty * numberOfUnits;
-            //console.log(`checking amount of ${recipeElement.element.name}...`, amtNeeded, recipeElement.element.quantity)
-            //const convertedInventoryQty = //make a function to convert the inventory quantity to the same unit as the recipe element (should take both as params, but only return the inventoryElementQty converted)
-            if (amtNeeded > recipeElement.element.quantity) {
-                console.log(`Not enough ${recipeElement.element.name} in inventory`);
-                return { isMakeable: false, error: new Error(`Not enough ${recipeElement.element.name} in inventory`) };
+        // while loop to find the maximum number of servings that can be made
+        let makeableServings = 1;
+        while (true) {
+            for (let e = 0; e < recipeElements.length; e += 1) {
+                const recipeElement = recipeElements[e];
+                const amtNeeded = recipeElement.qty * makeableServings;
+                //console.log(`checking amount of ${recipeElement.element.name}...`, amtNeeded, recipeElement.element.quantity)
+                //const convertedInventoryQty = //make a function to convert the inventory quantity to the same unit as the recipe element (should take both as params, but only return the inventoryElementQty converted)
+                if (amtNeeded > recipeElement.element.quantity) {
+                    if (makeableServings === 1) {
+                        return { makeableServings: 0, error: new Error(`Not enough ${recipeElement.element.name} in inventory`) };
+                    }
+                    console.log(`${recipeElement.element.name} only has enough in inventory to make ${makeableServings - 1} servings`);
+                    return { makeableServings: makeableServings - 1, error: null };
+                }
             }
+            makeableServings += 1;
         }
-        return { isMakeable: true, error: null }
     } catch (err) {
-        return { isMakeable: null, error: err instanceof Error ? err : new Error('Unknown error') };
+        return { makeableServings: 0, error: err instanceof Error ? err : new Error(`Unknown error: ${err}`) };
     }
   }
 
@@ -181,5 +185,5 @@ function serializeRecipe(recipe: any) {
 export { createElement, 
     createRecipe, 
     getElements, 
-    isRecipeMakeable, 
+    servingsMakeableOfRecipe, 
     serializeRecipe };
