@@ -27,6 +27,8 @@ model Element {
   type      String
   brand     String   @default("generic")
   quantity  Int
+  og_quantity Int?
+  // this is the original quantity of the element when NEW or FULL
   unit      String
   colorHex  String?
   userId    String
