@@ -71,6 +71,62 @@ async function servingsMakeableOfRecipe(recipeId: string):
     }
   }
 
+async function decrimentElementQuantity(elementId: string, amount: number): 
+    Promise<{ success: true; error: null } | { success: false; error: Error }> {
+    try {
+        const element = await db.element.findUnique({
+            where: { id: elementId }
+        });
+        if (!element) {
+            throw new Error('Element not found');
+        }
+        if (element.quantity < amount) {
+            throw new Error(`Not enough ${element.name} in inventory`);
+        }
+        await db.element.update({
+            where: { id: elementId },
+            data: { quantity: element.quantity - amount }
+        });
+        console.log(`Decremented ${element.name} by ${amount}`);
+        return { success: true, error: null };
+    } catch (err) {
+        return { success: false, error: err instanceof Error ? err : new Error(`Unknown error: ${err}`) };
+    }
+}
+
+async function makeRecipeForGivenServings(recipeId: string, servings: number):
+    Promise<{ success: true; error: null } | { success: false; error: Error }> {
+    try {
+        const recipe = await db.recipe.findUnique({
+            where: { id: recipeId },
+            include: {
+                steps: {
+                    include: {
+                        elements: {
+                            include: {
+                                element: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        if (!recipe) {
+            throw new Error('Recipe not found');
+        }
+        const recipeElements = recipe.steps.flatMap(step => step.elements.map(eis => ({
+            name: eis.element.name,
+            qty: eis.qty,
+            unit: eis.unit
+          })));
+        console.log("1 recipeElements", recipeElements);
+        console.log(`Making ${servings} servings of recipe ${recipe.name}`);
+        return { success: true, error: null };
+    } catch (err) {
+        return { success: false, error: err instanceof Error ? err : new Error(`Unknown error: ${err}`) };
+    }
+}
+
 async function createElement(formData: FormData): 
     Promise<{ success: true; error: null } | { success: false; error: Error }> {
     try {
@@ -186,4 +242,5 @@ export { createElement,
     createRecipe, 
     getElements, 
     servingsMakeableOfRecipe, 
+    makeRecipeForGivenServings,
     serializeRecipe };

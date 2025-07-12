@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Icon } from './Icon'
 import { Button } from './ui/button'
-import { servingsMakeableOfRecipe } from '@/app/pages/main/actions';
+import { servingsMakeableOfRecipe, makeRecipeForGivenServings } from '@/app/pages/main/actions';
 import {
   Dialog,
   DialogContent,
@@ -31,6 +31,7 @@ const MakeRecipeDialog = ({
   title,
   recipe,
 }: MakeRecipeIconButtonProps) => {
+  const [ openDialog, setOpenDialog ] = useState(false);
   const [ numberOfServings, setNumberOfServings ] = useState(1);
   const [ possibleServings, setPossibleServings ] = useState(1);
   const [ recipeWarning, setRecipeWarning ] = useState(false);
@@ -43,14 +44,15 @@ const MakeRecipeDialog = ({
 
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          onClick={handleCheckServings}
-          className="p-2 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground hover:scale-110 transform transition-transform">
-          <Icon id="martini" />
-        </Button>
-      </DialogTrigger>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+      <Button
+        onClick={async () => {
+          await handleCheckServings();
+          setOpenDialog(true);
+        }}
+        className="p-2 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground hover:scale-110 transform transition-transform">
+        <Icon id="martini" />
+      </Button>
       <DialogContent>
         <DialogTitle>Make a Recipe</DialogTitle>
         <DialogDescription>
@@ -59,7 +61,7 @@ const MakeRecipeDialog = ({
         <div className="grid grid-cols-2 items-center gap-4">
           <NumberPicker 
             value={numberOfServings}
-            updateNumber={(servings) => {
+            updateNumber={(servings: number) => {
               if (servings > possibleServings) {
                 setNumberOfServings(possibleServings);
                 setRecipeWarning(true);
@@ -94,18 +96,18 @@ const MakeRecipeDialog = ({
                 </div>
               </div>
             ))}
-            {/* <DialogFooter>
-                <Button className="mt-2">Made it!</Button>
-            </DialogFooter> */}
-            <Button
-              className="mt-2"
-              onClick={() => {
-                console.log(`Marking recipe ${recipe.id} as made with ${numberOfServings} servings`);
-                // Here you would typically call an API to mark the recipe as made
-              }}
-              disabled={numberOfServings < 1}>
-              Mark As Made
-            </Button>
+            <DialogFooter className="sm:justify-center">
+              <Button
+                className="mt-2"
+                onClick={async () => {
+                  await makeRecipeForGivenServings(recipe.id, numberOfServings);
+                  setOpenDialog(false);
+                  // Here you would typically call an API to mark the recipe as made
+                }}
+                disabled={numberOfServings > possibleServings}>
+                Mark As Made
+              </Button>
+            </DialogFooter>
             <p
               className="text-sm text-muted-foreground mt-2">
               This will handle updating your inventory based on the number of servings
