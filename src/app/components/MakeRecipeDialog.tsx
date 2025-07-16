@@ -102,7 +102,6 @@ const MakeRecipeDialog = ({
                 onClick={async () => {
                   await makeRecipeForGivenServings(recipe.id, numberOfServings);
                   setOpenDialog(false);
-                  // Here you would typically call an API to mark the recipe as made
                 }}
                 disabled={numberOfServings > possibleServings}>
                 Mark As Made

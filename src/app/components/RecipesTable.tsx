@@ -2,8 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { ColumnFiltersState, SortingState, useReactTable, getCoreRowModel, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
-
+import { ColumnFiltersState, SortingState, useReactTable, getCoreRowModel, getFilteredRowModel, getSortedRowModel, flexRender } from "@tanstack/react-table";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "./ui/table";
 import { columns } from "./RecipesColumnDef";    // import our column definitions
 import { RecipeWithDetails } from "./recipeDetailType"; // import the type for recipes with details
@@ -85,67 +84,3 @@ const RecipesTable = ({ recipes }: { recipes: RecipeWithDetails[] }) => {
 };
 
 export { RecipesTable };
-
-
-
-
-
-/* 
-'use client'
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "./ui/table"
-import { Recipe } from ".prisma/client"
-import { MakeRecipeDialog } from "./MakeRecipeDialog"
-
-
-const RecipesTable = ({ recipes }: { recipes: Recipe[] }) => {
-    return (
-      
-        <Table>
-          <TableCaption>A list of your concoctions.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Recipe</TableHead>
-              <TableHead>Elements</TableHead>
-              <TableHead>Steps</TableHead>
-              <TableHead className="text-right">Rating</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-              {recipes.map((recipe) => {
-                  const elementNames = [
-                      ...new Set(
-                        recipe.steps?.flatMap(step =>
-                          step.elements.map(eis => eis.element?.name).filter(Boolean)
-                        )
-                      )
-                    ];
-                  return (<TableRow key={recipe.id}>
-                <TableCell className="font-medium">{recipe.name}</TableCell>
-                <TableCell>
-                  <ul>
-                      {elementNames.map(el => <li key={el}>{el}</li>)}
-                  </ul>
-                  </TableCell>
-                <TableCell>{recipe.steps?.length || 1}</TableCell>
-                <TableCell>
-                  <MakeRecipeDialog recipe={recipe}/>
-                </TableCell>
-                <TableCell className="text-right">FIVE STARS</TableCell>
-              </TableRow>)})}
-          </TableBody>
-        </Table>
-
-    )
-  }
-  
-  export { RecipesTable }
- */

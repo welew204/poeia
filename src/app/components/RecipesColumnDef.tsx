@@ -1,9 +1,9 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { RecipeWithDetails } from "./recipeDetailType" // Adjust the import path as needed
+import { RecipeWithDetails } from "./recipeDetailType"
 import { MakeRecipeDialog } from "./MakeRecipeDialog";
-import { Button } from "./ui/button"; // (if needed for header with sorting icon, etc.)
+import { Button } from "./ui/button";
 
 // Helper to extract unique element names from a recipe
 const getElementNames = (recipe: RecipeWithDetails): string[] => {
@@ -64,7 +64,7 @@ export const columns: ColumnDef<RecipeWithDetails>[] = [
   },
   {
     id: "actions",
-    header: "Make It!", // empty header for the actions column
+    header: "Actions", // empty header for the actions column
     cell: ({ row }) => <MakeRecipeDialog recipe={row.original} />,
     enableSorting: false,
     enableFiltering: false,

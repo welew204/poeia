@@ -18,10 +18,19 @@ const Elements = async () => {
         }
     })
 
+    const fixedElements = elements.map(el => ({
+        ...el,
+        steps: el.steps?.map(eis => ({
+          ...eis,
+          // issue was qty coming in as a Decimal which is a Prisma type, not a number
+          qty: eis.qty?.toNumber?.() ?? null,
+        }))
+      }));
+
     return (
         <InteriorLayout>
             <div className="mt-2">
-                <ElementsTable elements={elements}/>
+                <ElementsTable elements={fixedElements}/>
                 <div className="px-page-side center mt-2">
                     {/* <h1 className="page-title">All Elements</h1> */}
                     <CreateElementDialog/>

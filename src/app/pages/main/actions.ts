@@ -116,10 +116,18 @@ async function makeRecipeForGivenServings(recipeId: string, servings: number):
         }
         const recipeElements = recipe.steps.flatMap(step => step.elements.map(eis => ({
             name: eis.element.name,
+            id: eis.element.id,
+            type: eis.element.type,
             qty: eis.qty,
             unit: eis.unit
           })));
-        console.log("1 recipeElements", recipeElements);
+        await Promise.all(
+            recipeElements.map(async eis => {
+                const amtNeeded = eis.qty * servings
+                await decrimentElementQuantity(eis.id, amtNeeded)
+            })
+        )
+        // TODO need to think thru "using up" custom elements ...
         console.log(`Making ${servings} servings of recipe ${recipe.name}`);
         return { success: true, error: null };
     } catch (err) {
@@ -212,6 +220,30 @@ const createRecipe = async (formData: FormData, ingredients: Ingredient[], steps
     }
 }
 
+async function reupElementQuantity(elementId: string, newQuantity: number): 
+    Promise<{ success: true; error: null } | { success: false; error: Error }> {
+    try {
+        const element = await db.element.findUnique({
+            where: { id: elementId }
+        });
+        if (!element) {
+            throw new Error('Element not found');
+        }
+        const data = { quantity: element.quantity + newQuantity };
+        if (element.og_quantity == null) {
+            data.og_quantity = newQuantity;
+        }
+        await db.element.update({
+            where: { id: elementId },
+            data
+        });
+        console.log(`Reupped ${element.name} to ${newQuantity}`);
+        return { success: true, error: null };
+    } catch (err) {
+        return { success: false, error: err instanceof Error ? err : new Error(`Unknown error: ${err}`) };
+    }
+}
+
 const getElements = async () => {
     try {
         console.log("getting elements array...")
@@ -222,8 +254,6 @@ const getElements = async () => {
         return { success: false, error: error as Error };
     }
 }
-
-
 
 function serializeRecipe(recipe: any) {
     return {
