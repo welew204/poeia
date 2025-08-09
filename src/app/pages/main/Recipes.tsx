@@ -5,7 +5,7 @@ import { RecipesTable } from "@/app/components/RecipesTable"
 import { CreateRecipeDialog } from "@/app/components/CreateRecipeDialog"
 import { serializeRecipe } from "@/app/pages/main/actions";
 
-const Recipes = async () => {
+const Recipes = async ({ request }: { request: Request }) => {
     const recipes = await db.recipe.findMany({
         include: {
             steps: {
@@ -23,10 +23,13 @@ const Recipes = async () => {
 
     const elements = await db.element.findMany()
 
+    const url = new URL(request.url);
+    const search = url.searchParams.get("query") || "";
+
     return (
         <InteriorLayout>
             <div className="mt-2">
-                <RecipesTable recipes={recipesSerialized}/>
+                <RecipesTable recipes={recipesSerialized} initialSearch={search}/>
                 <div className="px-page-side center mt-2">
                     <CreateRecipeDialog elements={elements}/>
                 </div>

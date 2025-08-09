@@ -6,8 +6,6 @@ import { rainbow } from "@/app/utils";
 
 const Dashboard = async () => {
     const shelfBottleTypes = ['spirit', 'fortified wine', 'liquer']
-
-
     const spirits = await db.element.findMany({
       where: {
         type: {
@@ -15,27 +13,25 @@ const Dashboard = async () => {
         }
       }
     })
-    console.log(spirits)
+    //console.log(spirits)
     const spiritPanes = spirits.map((spirit) => (
       {
         label: spirit.name,
-        url: link("/main/recipes"),
+        url: `${link("/main/elements")}?query=${encodeURIComponent(spirit.name)}`,
         color: spirit.colorHex
       }
     ))
-    console.log(spiritPanes)
+    //console.log(spiritPanes)
     const recipes = await db.recipe.findMany()
     const recipePanes = recipes.map((recipe) => (
       {
         label: recipe.name,
-        url: link("/main/recipes"),
+        url: `${link("/main/recipes")}?query=${encodeURIComponent(recipe.name)}`,
         color: recipe.colorHex || rainbow()
       }
     ))
-    console.log(recipePanes)
+    //console.log(recipePanes)
     const totalPanes = recipePanes.concat(spiritPanes)
-
-
 
     return (
         <InteriorLayout>

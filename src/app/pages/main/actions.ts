@@ -1,8 +1,14 @@
 'use server'
 import { db } from "src/db";
+import { requestInfo } from "@redwoodjs/sdk/worker";
 
-// TODO handle claimsUser...
-const frankFurterId = "1aea7045-8358-4e94-a846-14c276010669"
+async function getUserId() {
+    const { ctx } = requestInfo
+    if (!ctx.user) {
+        throw new Error("User not found");
+    }
+    return ctx.user.id
+}
 
 // TODO import from shared types
 type Ingredient = {
@@ -139,6 +145,7 @@ async function createElement(formData: FormData):
     Promise<{ success: true; error: null } | { success: false; error: Error }> {
     try {
         const quantity = getNumberFromFormData(formData, "quantity");
+        const userId = await getUserId()
         await db.element.create({
             data: {
                 name: formData.get("name") as string,
@@ -148,9 +155,10 @@ async function createElement(formData: FormData):
                 quantity: quantity,
                 unit: formData.get("unit") as string,
                 brand: formData.get("brand") as string,
+                colorHex: formData.get("colorHex") as string,
                 user: {
                     connect: {
-                        id: frankFurterId
+                        id: userId
                     }
                 }
             }
@@ -166,15 +174,13 @@ async function createElement(formData: FormData):
 const createRecipe = async (formData: FormData, ingredients: Ingredient[], steps: string[]): 
     Promise<{ success: true; error: null } | { success: false; error: Error }> => {
     try {
-        console.log(formData)
-        console.log(ingredients)
-        console.log(steps)
+        const userId = await getUserId();
         const recipe = await db.recipe.create({
             data: {
                 name: formData.get("name") as string,
                 user: {
                     connect: {
-                        id: frankFurterId
+                        id: userId
                     }
                 },
                 createdAt: new Date(),

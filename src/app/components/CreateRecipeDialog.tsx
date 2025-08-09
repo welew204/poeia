@@ -117,7 +117,7 @@ const CreateRecipeDialog = ({elements}: {elements: Element[]}) => {
         <DialogTrigger asChild>
           <Button onClick={() => setOpen(true)}>New Recipe</Button>
         </DialogTrigger>
-        <DialogContent className="md">
+        <DialogContent className="md className={'lg:max-w-screen-lg overflow-y-scroll max-h-screen'}">
             <DialogHeader>
               <DialogTitle>Add Recipe</DialogTitle>
               <DialogDescription>

@@ -3,7 +3,8 @@ import { ColumnDef } from "@tanstack/react-table";
 // import the re-up dialog if/when needed
 import { Button } from "./ui/button";
 import { Element } from ".prisma/client"
-
+import {CreateElementDialog} from "./CreateElementDialog";
+import { ReUpElementDialog } from "./ReUpDialog";
 
 export const columns: ColumnDef<Element>[] = [
     {
@@ -40,14 +41,20 @@ export const columns: ColumnDef<Element>[] = [
             return (
                 <div
                     className="flex items-center gap-2">
+                    <ReUpElementDialog element={row.original} />
                     <Button
                         onClick={() => {
-                            // Handle action, e.g. open a dialog or perform an action
                             console.log(`Action for element: ${row.original.name}`);
+                            // Handle action, e.g. open a dialog or perform an action
+                            // check if Element has a quantity, and an og_quantity
+                            // dialog that populates what it has
+                            // input box to add a new og_quantity
+                            // guidance to say (cannot edit this og_quantity -> make a different element if desired)
                         }}
                     >
-                        Re-Up
+                        Mark As Used Up
                     </Button>
+                    {/* 
                     <Button
                         className="p-2 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground hover:scale-110 transform transition-transform"
                         onClick={() => {
@@ -56,7 +63,7 @@ export const columns: ColumnDef<Element>[] = [
                         }}
                     >
                         Mark As Used
-                    </Button>
+                    </Button> */}
                 </div>
             );
         },

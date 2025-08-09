@@ -7,7 +7,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from ".
 import { columns } from "./RecipesColumnDef";    // import our column definitions
 import { RecipeWithDetails } from "./recipeDetailType"; // import the type for recipes with details
 
-const RecipesTable = ({ recipes }: { recipes: RecipeWithDetails[] }) => {
+const RecipesTable = ({ recipes, initialSearch }: { recipes: RecipeWithDetails[] , initialSearch?: string}) => {
   // Table state for sorting and filtering
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState<any>([])
@@ -24,6 +24,11 @@ const RecipesTable = ({ recipes }: { recipes: RecipeWithDetails[] }) => {
     getSortedRowModel: getSortedRowModel(),     // enable client-side sorting
     getFilteredRowModel: getFilteredRowModel(), // enable client-side filtering
   });
+
+  React.useEffect(() => {
+    console.log(initialSearch)
+    table.setGlobalFilter(initialSearch)
+  }, [])
 
   return (
     <div>

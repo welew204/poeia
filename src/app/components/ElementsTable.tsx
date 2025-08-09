@@ -15,7 +15,7 @@ import {
 import { Element } from ".prisma/client"
 import { columns } from "./ElementsColumnDef"; // import our column definitions
 
-const ElementsTable = ({ elements }: { elements: Element[] }) => {
+const ElementsTable = ({ elements, initialSearch }: { elements: Element[], initialSearch?: string }) => {
   // Table state for sorting and filtering
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState<string>("");
@@ -32,18 +32,22 @@ const ElementsTable = ({ elements }: { elements: Element[] }) => {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-    return (
-      <div>
-        <div className="px-4 py-2 w-full sm:w-1/2 md:w-1/3">
-          <input 
-            type="text"
-            placeholder="Search..."
-            value={globalFilter || ""}
-            onChange={e => table.setGlobalFilter(String(e.target.value))}
-            className="border p-1 rounded text-sm"
-          />
-        </div>
-  
+  React.useEffect(() => {
+    table.setGlobalFilter(initialSearch)
+  }, [])
+
+
+  return (
+    <div>
+      <div className="px-4 py-2 w-full sm:w-1/2 md:w-1/3">
+        <input 
+          type="text"
+          placeholder="Search..."
+          value={globalFilter || ""}
+          onChange={e => table.setGlobalFilter(String(e.target.value))}
+          className="border p-1 rounded text-sm"
+        />
+      </div>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
@@ -62,7 +66,7 @@ const ElementsTable = ({ elements }: { elements: Element[] }) => {
               </TableRow>
             ))}
           </TableHeader>
-  
+
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map(row => (
@@ -91,48 +95,3 @@ const ElementsTable = ({ elements }: { elements: Element[] }) => {
   };
 
 export { ElementsTable };
-
-/* 
-const ElementsTable = ({ elements }: { elements: Element[] }) => {
-    return (
-        <Table>
-        <TableCaption>A list of your elements.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Element</TableHead>
-            <TableHead>Brand</TableHead>
-            <TableHead>Quantity</TableHead>
-            <TableHead>Unit</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Recipes</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-            {elements.map((element) => {
-                const recipeNames = [
-                    ...new Set(
-                      element.steps?.flatMap(eis =>
-                        eis.step.recipe?.name
-                      )
-                    )
-                  ];
-                //console.log(recipeNames)
-                const recipeItems = recipeNames.map(rec => <li key={rec}>{rec}</li>)
-                return (<TableRow key={element.id}>
-              <TableCell className="font-medium">{element.name}</TableCell>
-              <TableCell>{element.brand != "generic" ? element.brand : ''}</TableCell>
-              <TableCell>{element.quantity}</TableCell>
-              <TableCell>{element.unit}</TableCell>
-              <TableCell>{element.type}</TableCell>
-              <TableCell>
-                <ul>
-                    {recipeItems}
-                </ul>
-                </TableCell>
-            </TableRow>)})}
-        </TableBody>
-      </Table>
-    )
-  }
-  
-  export { ElementsTable } */
