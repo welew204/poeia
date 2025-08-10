@@ -1,7 +1,3 @@
-SELECT id, name, updatedAt, createdAt, typeof(updatedAt), typeof(createdAt) FROM Element;
-UPDATE Element SET updatedAt='2025-05-04T20:37:06.065Z' WHERE typeof(updatedAt)="integer";
-UPDATE Element SET createdAt='2025-05-03T20:37:06.065Z' WHERE typeof(createdAt)="integer";
-
 UPDATE element
 SET
   createdAt = CASE
