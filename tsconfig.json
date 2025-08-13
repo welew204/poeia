@@ -19,10 +19,9 @@
       "./types/rw.d.ts",
       "./types/vite.d.ts"
     ],
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      ".prisma/*": ["./node_modules/.prisma/*"]
+      "@generated/*": ["./generated/*"]
     },
     /* Enable importing .json files */
     "resolveJsonModule": true,

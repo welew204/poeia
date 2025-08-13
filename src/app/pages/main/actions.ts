@@ -1,5 +1,5 @@
 "use server";
-import { db } from "src/db";
+import { db } from "@/db";
 import { requestInfo } from "rwsdk/worker";
 
 async function getUserId() {
