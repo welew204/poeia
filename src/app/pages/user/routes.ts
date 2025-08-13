@@ -1,7 +1,7 @@
-import { route } from "@redwoodjs/sdk/router";
+import { route } from "rwsdk/router";
 import { Login } from "./Login";
 import { sessions } from "@/session/store";
-import { Signup } from "./Signup"
+import { Signup } from "./Signup";
 
 export const userRoutes = [
   route("/login", [Login]),
