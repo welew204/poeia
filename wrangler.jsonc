@@ -3,9 +3,7 @@
   "name": "poeia",
   "main": "src/worker.tsx",
   "compatibility_date": "2024-09-23",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "binding": "ASSETS"
   },
@@ -27,16 +25,14 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": [
-        "SessionDurableObject"
-      ]
+      "new_sqlite_classes": ["SessionDurableObject"]
     }
   ],
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "poeia-zygotic-porcupine",
-      "database_id": "c417dd1f-be7c-459f-95c4-9e8017a996b3"
+      "database_name": "poeia",
+      "database_id": "63969411-a9a8-4cd2-b68f-b8c435540c91"
     }
   ]
 }
