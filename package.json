@@ -82,6 +82,8 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "1.7.4",
+    "@cloudflare/workers-types": "^4.20250407.0",
     "@types/d3-delaunay": "^6.0.4",
     "@types/d3-polygon": "^3.0.2",
     "@types/node": "^22.14.0",
