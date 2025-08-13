@@ -1,5 +1,5 @@
-import { defineApp, ErrorResponse } from "@redwoodjs/sdk/worker";
-import { index, route, render, prefix } from "@redwoodjs/sdk/router";
+import { defineApp, ErrorResponse } from "rwsdk/worker";
+import { index, route, render, prefix } from "rwsdk/router";
 import { Document } from "@/app/Document";
 import { Home } from "@/app/pages/Home";
 import { setCommonHeaders } from "@/app/headers";
@@ -9,9 +9,9 @@ import { Session } from "./session/durableObject";
 import { db, setupDb } from "./db";
 import type { User } from "@prisma/client";
 import { env } from "cloudflare:workers";
-import { Dashboard } from "./app/pages/main/Dashboard"
-import { Recipes } from "./app/pages/main/Recipes"
-import { Elements } from "./app/pages/main/Elements"
+import { Dashboard } from "./app/pages/main/Dashboard";
+import { Recipes } from "./app/pages/main/Recipes";
+import { Elements } from "./app/pages/main/Elements";
 
 export { SessionDurableObject } from "./session/durableObject";
 
@@ -20,14 +20,14 @@ export type AppContext = {
   user: User | null;
 };
 
-const isAuthenticated = ({ ctx }: { ctx: AppContext}) => {
+const isAuthenticated = ({ ctx }: { ctx: AppContext }) => {
   if (!ctx.user) {
     return new Response(null, {
       status: 302,
       headers: { Location: "/user/login" },
     });
   }
-}
+};
 
 export default defineApp([
   setCommonHeaders(),
@@ -65,9 +65,9 @@ export default defineApp([
     route("/legal/privacy", () => <h1>Privacy Policy</h1>),
     route("/legal/terms", () => <h1>Terms of Service</h1>),
     prefix("/main", [
-      route("/", [ isAuthenticated, Dashboard ]),
-      route("/recipes", [ isAuthenticated, Recipes ]),
-      route("/elements", [ isAuthenticated, Elements ])
-    ])
+      route("/", [isAuthenticated, Dashboard]),
+      route("/recipes", [isAuthenticated, Recipes]),
+      route("/elements", [isAuthenticated, Elements]),
+    ]),
   ]),
 ]);
