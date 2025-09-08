@@ -16,7 +16,7 @@ const Dashboard = async () => {
   //console.log(spirits)
   const spiritPanes = spirits.map((spirit) => ({
     label: spirit.name,
-    url: `${link("/main/elements")}?query=${encodeURIComponent(spirit.name)}`,
+    url: `${link("/main/recipes")}?query=${encodeURIComponent(spirit.name)}`,
     color: spirit.colorHex,
   }));
   //console.log(spiritPanes)

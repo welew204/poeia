@@ -1,7 +1,7 @@
 import { defineScript } from "rwsdk/worker";
 import { db, setupDb } from "@/db";
 
-const frankFurterId = "1aea7045-8358-4e94-a846-14c276010669";
+const willTestId = "48ffc113-6fbf-4cf4-a176-2ac5278e7272";
 
 const createNegroni = async () => {
   // recipe
@@ -12,7 +12,7 @@ const createNegroni = async () => {
       updatedAt: new Date(),
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -29,7 +29,7 @@ const createNegroni = async () => {
       unit: "ml",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -45,7 +45,7 @@ const createNegroni = async () => {
       unit: "ml",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -61,7 +61,7 @@ const createNegroni = async () => {
       unit: "ml",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -77,7 +77,7 @@ const createNegroni = async () => {
       unit: "unit",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -93,7 +93,7 @@ const createNegroni = async () => {
       unit: "unit",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -217,7 +217,7 @@ const createGnT = async () => {
       updatedAt: new Date(),
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -226,7 +226,7 @@ const createGnT = async () => {
   let gin = await db.element.findFirst({
     where: {
       name: "Gin",
-      userId: frankFurterId,
+      userId: willTestId,
     },
     orderBy: {
       brand: "asc",
@@ -245,7 +245,7 @@ const createGnT = async () => {
         unit: "ml",
         user: {
           connect: {
-            id: frankFurterId,
+            id: willTestId,
           },
         },
       },
@@ -262,7 +262,7 @@ const createGnT = async () => {
       unit: "c:6oz bottle",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -278,7 +278,7 @@ const createGnT = async () => {
       unit: "unit",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -294,7 +294,7 @@ const createGnT = async () => {
       unit: "unit",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -401,7 +401,7 @@ const createLemonDrop = async () => {
       updatedAt: new Date(),
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -417,7 +417,7 @@ const createLemonDrop = async () => {
       unit: "oz",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -433,7 +433,7 @@ const createLemonDrop = async () => {
       unit: "oz",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -449,7 +449,7 @@ const createLemonDrop = async () => {
       unit: "unit",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -466,7 +466,7 @@ const createLemonDrop = async () => {
       unit: "ml",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -483,7 +483,7 @@ const createLemonDrop = async () => {
       unit: "ml",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },
@@ -500,7 +500,7 @@ const createLemonDrop = async () => {
       unit: "unit",
       user: {
         connect: {
-          id: frankFurterId,
+          id: willTestId,
         },
       },
     },

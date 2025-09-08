@@ -31,7 +31,7 @@ const Elements = async ({ request }: { request: Request }) => {
   }));
 
   return (
-    <InteriorLayout>
+    <InteriorLayout page="elements">
       <div className="mt-2">
         <ElementsTable elements={fixedElements} initialSearch={search} />
         <div className="px-page-side center mt-2">

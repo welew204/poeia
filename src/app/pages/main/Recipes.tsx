@@ -27,7 +27,7 @@ const Recipes = async ({ request }: { request: Request }) => {
   const search = url.searchParams.get("query") || "";
 
   return (
-    <InteriorLayout>
+    <InteriorLayout page="recipes">
       <div className="mt-2">
         <RecipesTable recipes={recipesSerialized} initialSearch={search} />
         <div className="px-page-side center mt-2">

@@ -2,7 +2,9 @@ import { link } from "@/app/shared/links";
 import { Avatar, AvatarFallback } from '@/app/components/ui/avatar'
 import { Settings } from 'lucide-react';
 
-const Header = () => {
+type HeaderProps = { page: string }
+
+const Header = ({ page }: HeaderProps) => {
     return (
       <header className="py-5 px-page-side h-20 flex justify-between items-center border-b-1 border-border">
         {/* left side */}
@@ -16,8 +18,8 @@ const Header = () => {
             </a>
             <nav className="flex justify-start items-center px-page-side h-20 border-b border-border">
                 <ul className="flex gap-6 flex-wrap">
-                <li><a className="text-sm font-medium hover:underline" href={link("/main/recipes")}>Recipes</a></li>
-                <li><a className="text-sm font-medium hover:underline" href={link("/main/elements")}>Elements</a></li>
+                <li><a className={`text-sm hover:underline ${page === 'recipes' ? "font-bold" : "font-medium"}`} href={link("/main/recipes")}>Recipes</a></li>
+                <li><a className={`text-sm hover:underline ${page === 'elements' ? "font-bold" : "font-medium"}`} href={link("/main/elements")}>Elements</a></li>
                 </ul>
             </nav>
         </div>

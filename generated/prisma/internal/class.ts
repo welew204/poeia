@@ -22,14 +22,14 @@ const config: runtime.GetPrismaClientConfig = {
       "value": "prisma-client"
     },
     "output": {
-      "value": "/Users/justin/rw/blotter/poeia/generated/prisma",
+      "value": "/Users/williamhbelew/Hacking/poeia/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
-      "generatedFileExtension": "ts",
-      "importFileExtension": "ts",
       "moduleFormat": "esm",
       "runtime": "workerd",
+      "importFileExtension": "ts",
+      "generatedFileExtension": "ts",
       "engineType": "client"
     },
     "binaryTargets": [
@@ -43,7 +43,7 @@ const config: runtime.GetPrismaClientConfig = {
       "driverAdapters",
       "queryCompiler"
     ],
-    "sourceFilePath": "/Users/justin/rw/blotter/poeia/prisma/schema.prisma",
+    "sourceFilePath": "/Users/williamhbelew/Hacking/poeia/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativePath": "../../prisma",
